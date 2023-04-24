@@ -67,10 +67,7 @@ if (countries.length === 1) {
  <p>Languages: ${Object.values(countries[0].languages).join(',')}</p>
 `;
  }
- if (countries.length === null ){
-    `
- <p> Nie ma takiego czegoś </p>
-`}
+ 
  }, DEBOUNCE_DELAY)
 )
 
