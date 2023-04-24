@@ -10,6 +10,10 @@ body {
   background-color: #fafafa;
   color: #212121;
   line-height: 1.5;
+  background-color: bisque;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #search-box {
@@ -31,18 +35,45 @@ body {
 
 }
 
-.search-wrapper{
-  margin: 20px;
+.finder{
   display: flex;
+  flex-direction: column;
+  border: 1px solid black;
   align-items: center;
   justify-content: center;
-  column-gap: 20px;
+  padding: 50px;
+  width: 400px;
+  background-color: rgb(120, 120, 158);
 }
 
-.input{
-  padding: 12px;
+label{
+  font-size: 24px;
+  font-weight: bold;
 }
 
-.searchbtn {
-  padding: 12px;
+.country-list{
+  list-style: none;
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+
+}
+
+.country-list >li {
+  list-style: none;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-weight: bold;
+  cursor: pointer;
+
+}
+
+.country-list >li >img {
+  list-style: none;
+  margin: 10px;
+
 }
