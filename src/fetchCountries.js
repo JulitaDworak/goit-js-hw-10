@@ -1,13 +1,13 @@
-const API_URL = 'https://restcountries.com/v3.1/name';
+const BASE_API_URL = 'https://restcountries.com/v3.1/name/';
+const fields = "fields=name,capital,population,flags,languages"
 
-export const fetchCountries = (name) => {
-   return  fetch(`${API_URL}/${name}?fields=name,capital,population,flags,languages
-   `)
-    .then((res) => res.json())
-
-    // .catch (error =>  {
-    //     Notiflix.Notify.failure('Oops, there is no country with that name');
-    // })    
+    export const fetchCountries = (name) => {
+       return fetch(`${BASE_API_URL}${name}?${fields}
+       `)
+       .then(response => response.json())
+       .catch (error => Notiflix.Notify.failure('Oops, there is no country with that name') )
     
-}
+       
+    }    
 
+ 

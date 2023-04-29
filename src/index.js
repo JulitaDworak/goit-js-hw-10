@@ -10,64 +10,78 @@ const searchBox = document.getElementById('search-box')
 
 const DEBOUNCE_DELAY = 300;
 
-searchBox.addEventListener('input', debounce(async (e) => {
-
-// const countryValue = e.target.value
-// const countryName = countryValue.trim()
-const countryName = e.target.value
+searchBox.addEventListener('input', debounce(onInputSearch), DEBOUNCE_DELAY)
 
 
-const countries = await fetchCountries((countryName))
+// function for listener
+function onInputSearch () {
+const name = searchBox.value
 
-if(countryName === "") {
-    countryList.innerHTML="";
-    countryInfo.innerHTML="";
-    return
+// task to delete country info
+if (name ==="") {
+    return (countryList.innerHTML=""), countryInfo.innerHTML=""
 }
 
-if (countries.length >10) {
-    Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+// show info
+fetchCountries(name) 
+    .then(countries => { 
+countryList.innerHTML = ""
+countryInfo.innerHTML =""
+
+if(countries.length === 1) {
+        countryList.innerHTML = addCountryList(countries)
+        countryInfo.innerHTML = addCountryInfo(countries)
+    }
+else if(countries.length >= 10) {
+    toManyCountries()
+}
+else {
+    countryList.innerHTML = addCountryList(countries)
+}
+})
+.catch( error => alertNotFound())
 }
 
-else (countries.length >= 2 && countries.length <=10) 
-{   
-     countryList.innerHTML = countries.map((country) => 
-`<li> <img height="24" src="${country.flags.png}" />${country.name.common}</li>`
-)
-     .join("");
 
+// function about basic info of countries name and flag
 
+function addCountryList (countries){
+    const list = countries.map(({flags, name}) => {
+        return ` 
+        <li>
+        <img src="${flags.png}" width ="24"></img>
+        ${name.common}
+        </li>
+        `
+    })
+    .join("")
+    return list
+}
 
-    //  countryList.addEventListener('click', (e)=> {
-    //     console.log(`object`);
-    
-    //     countryList.innerHTML = countries.map((country) => 
-    //     `<li> <img height="24" src="${country.flags.png}" />${country.name.common}</li>`
-    //     )
-    //          .join("");
-    //     countryInfo.innerHTML = 
-    //     `
-    //  <p>Capital: ${countries[0].capital}</p>
-    //  <p>Population: ${countries[0].population}</p>
-    //  <p>Languages: ${Object.values([0].languages).join(',')}</p>
-    // `;
-    // })
-    
-    // console.log(countries.indexOf());
+// function about full info of countries 
 
+function addCountryInfo (countries) {
+    const fullInfo = countries
+    .map(({capital,population,languages}) =>{
+return `<p><b>Capital</b>: ${capital}</p>
+ <p><b>Population</b>: ${population}</p>
+ <p><b>Languages</b>: ${Object.values(languages).join(',')}</p>
+`
+    })
+    .join("")
+    return fullInfo
+}
 
-    };
+// function about to many countries
 
+function toManyCountries () { 
+Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+}
 
-if (countries.length === 1) {
-    countryInfo.innerHTML = 
-    `
- <p>Capital: ${countries[0].capital}</p>
- <p>Population: ${countries[0].population}</p>
- <p>Languages: ${Object.values(countries[0].languages).join(',')}</p>
-`;
- }
- 
- }, DEBOUNCE_DELAY)
-)
+// function about not found countries
+
+function alertNotFound () {
+    Notiflix.Notify.failure('Oops, there is no country with that name');
+}
+
 
